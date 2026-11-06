@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class VertxJVMEventChannel extends VertxChannel implements JVMEventChannel {
 
     // Delivery options for the event bus, using the JVMEventCodec.
-    final private DeliveryOptions options = new DeliveryOptions().setCodecName(JVMEventCodec.NAME);
+    final private DeliveryOptions options = new DeliveryOptions().setCodecName(JVMEventCodec.CODEC_NAME);
 
     /**
      * Default constructor.

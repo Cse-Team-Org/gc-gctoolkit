@@ -20,7 +20,7 @@ public class DataSourceVerticle extends AbstractVerticle {
     private static final Logger LOGGER = Logger.getLogger(DataSourceVerticle.class.getName());
 
     // Vert.x instance.
-    final private Vertx vertx;
+    final private Vertx vertxInstance;
     // Channel name for the inbox.
     final private String inbox;
     // ID of the verticle.
@@ -35,7 +35,7 @@ public class DataSourceVerticle extends AbstractVerticle {
      * @param listener the listener for processing data source messages.
      */
     public DataSourceVerticle(Vertx vertx, String channelName, DataSourceChannelListener listener) {
-        this.vertx = vertx;
+        this.vertxInstance = vertx;
         this.inbox = channelName;
         this.processor = listener;
     }
@@ -55,7 +55,7 @@ public class DataSourceVerticle extends AbstractVerticle {
     @Override
     public void start(Promise<Void> promise) {
         try {
-            vertx.eventBus().<String>consumer(inbox, message -> {
+            vertxInstance.eventBus().<String>consumer(inbox, message -> {
                 processor.receive(message.body());
                 // Removed vertx.undeploy(id) to avoid double-undeploy
             }).completion()

@@ -20,7 +20,7 @@ public class JVMEventVerticle extends AbstractVerticle {
     // Logger for the JVMEventVerticle class.
     private static final Logger LOGGER = Logger.getLogger(JVMEventVerticle.class.getName());
     // Vert.x instance.
-    final private Vertx vertx;
+    final private Vertx vertxInstance;
     // Channel name for the inbox.
     final private String inbox;
     // Listener for processing JVM events.
@@ -35,7 +35,7 @@ public class JVMEventVerticle extends AbstractVerticle {
      * @param listener the listener for processing JVM events.
      */
     public JVMEventVerticle(Vertx vertx, String channelName, JVMEventChannelListener listener) {
-        this.vertx = vertx;
+        this.vertxInstance = vertx;
         this.inbox = channelName;
         this.processor = listener;
     }
@@ -54,7 +54,7 @@ public class JVMEventVerticle extends AbstractVerticle {
      */
     @Override
     public void start(Promise<Void> promise) {
-        vertx.eventBus().<JVMEvent>consumer(inbox, message -> {
+        vertxInstance.eventBus().<JVMEvent>consumer(inbox, message -> {
             JVMEvent event = message.body();
             try {
                 processor.receive(event);
