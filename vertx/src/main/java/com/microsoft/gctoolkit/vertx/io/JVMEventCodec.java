@@ -8,7 +8,7 @@ import io.vertx.core.eventbus.MessageCodec;
 
 public class JVMEventCodec implements MessageCodec<JVMEvent, JVMEvent> {
 
-    public static String NAME = "JVMEvent";
+    public static final String CODEC_NAME = "JVMEvent";
 
     @Override
     public void encodeToWire(Buffer buffer, JVMEvent jvmEvent) {
@@ -27,7 +27,7 @@ public class JVMEventCodec implements MessageCodec<JVMEvent, JVMEvent> {
 
     @Override
     public String name() {
-        return NAME;
+        return CODEC_NAME;
     }
 
     @Override

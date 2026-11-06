@@ -224,9 +224,9 @@ public class GenerationalHeapParser extends PreUnifiedGCLogParser implements Sim
         parseRules.put(DEFNEW_DETAILS, this::defNewDetails);
         parseRules.put(PRECLEAN_REFERENCE_PAR_NEW_REFERENCE, this::preCleanReferenceParNewReference);
 
-        parseRules.put(PSYOUNGGEN, this::psYoungGen);
-        parseRules.put(PSYOUNGGEN_PROMOTION_FAILED, this::psYoungGen);
-        parseRules.put(PSFULL, this::psFull);
+        parseRules.put(PSYOUNGGEN, this::psYoungGenCollection);
+        parseRules.put(PSYOUNGGEN_PROMOTION_FAILED, this::psYoungGenCollection);
+        parseRules.put(PSFULL, this::psFullCollection);
         parseRules.put(PSYOUNGGEN_NO_DETAILS, this::psYoungNoDetails);
         parseRules.put(PSYOUNGGEN_REFERENCE_SPLIT, this::psYoungGenReferenceProcessingSplit);
         parseRules.put(PSYOUNGGEN_REFERENCE, this::psYoungGenReferenceProcessing);
@@ -1576,7 +1576,7 @@ public class GenerationalHeapParser extends PreUnifiedGCLogParser implements Sim
     }
 
     //939.183: [GC [PSYoungGen: 523744K->844K(547584K)] 657668K->135357K(1035008K), 0.0157986 secs] [Times: user=0.30 sys=0.01, real=0.02 secs]
-    public void psYoungGen(GCLogTrace trace, String line) {
+    public void psYoungGenCollection(GCLogTrace trace, String line) {
         PSYoungGen collection = new PSYoungGen(getClock(), trace.gcCause(), trace.getDoubleGroup(trace.groupCount()));
         collection.add(trace.getOccupancyBeforeAfterWithMemoryPoolSizeSummary(8), getTotalOccupancyBeforeAfterWithTotalHeapPoolSizeSummary(trace, 14));
         collection.add(extractCPUSummary(line));
@@ -1585,7 +1585,7 @@ public class GenerationalHeapParser extends PreUnifiedGCLogParser implements Sim
 
     // #433 - Offset for this call needed to be incremented by 3 to 7 (previously 4)
     //23.331: [Full GC (Metadata GC Threshold)  17386K->16928K(415232K), 0.0498462 secs]
-    public void psFull(GCLogTrace trace, String line) {
+    public void psFullCollection(GCLogTrace trace, String line) {
         FullGC collection;
         GCCause cause = trace.gcCause();
         if ((cause == GCCause.JAVA_LANG_SYSTEM) || (cause == GCCause.HEAP_DUMP) || (cause == GCCause.HEAP_INSPECTION)) {
